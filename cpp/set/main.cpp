@@ -167,11 +167,7 @@ int main(int argc, char** argv)
             }
         }
 
-        if (numRequiredLetters != requiredLetterSet.size()) {
-            is_valid_word = false;
-        }
-
-        if (is_valid_word) {
+        if (is_valid_word && (numRequiredLetters == requiredLetterSet.size())) {
             std::cout << line << "\n";
         }
 	}
