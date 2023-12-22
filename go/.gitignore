@@ -1,0 +1,9 @@
+# Executable
+wordlesolver
+
+# Any .txt files besides word list, e.g. results.txt
+*.txt
+!wordlewords.txt
+
+# macOS
+.DS_Store
