@@ -100,6 +100,10 @@ if excludeLetterSet.count >= 26 {
     print("Error: All letters of the alphabet have been excluded.")
     exit(1)
 }
+if requireLetterSet.count > 5 {
+    print("Error: More letters have been required than there are in the word.")
+    exit(1)
+}
 if !requireLetterSet.isDisjoint(with: excludeLetterSet) {
     print("Error: The set of letters to require and the set of letters to exclude have one or more letters in common.")
     exit(1)
