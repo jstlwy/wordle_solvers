@@ -1,13 +1,15 @@
 #include <algorithm>
 #include <array>
+#include <bitset>
 #include <cctype>
 #include <fstream>
 #include <iostream>
 #include <regex>
-#include <set>
 #include <sstream>
 #include <string>
 #include <vector>
+
+constexpr std::size_t WORDLE_WORD_LEN {5};
 
 std::string get_arg_param(const std::vector<std::string>& args, std::string_view expected_arg)
 {
@@ -37,9 +39,9 @@ std::vector<std::string> split(const std::string& s, const char delim)
     return result;
 }
 
-std::set<char> get_letters_from_param(const std::string& param)
+std::bitset<26> get_letters_from_param(const std::string& param)
 {
-    std::set<char> letter_set;
+    std::bitset<26> letter_set{0};
     std::vector<std::string> letters = split(param, ',');
     for (const std::string& letter : letters) {
         if (letter.length() != 1) {
@@ -47,7 +49,8 @@ std::set<char> get_letters_from_param(const std::string& param)
         }
         const char c = letter.at(0);
         if (std::isalpha(c)) {
-            letter_set.insert(c);
+            const std::size_t pos = c - 'a';
+            letter_set.set(pos);
         }
     }
     return letter_set;
@@ -90,30 +93,28 @@ int main(int argc, char** argv)
     // GET EXCLUDED AND REQUIRED LETTERS
     // ----------------------------------
     // Use sets to prevent any letters from appearing more than once
-    const std::set<char> excludedLetterSet = get_letters_from_param(excludeArg);
-    if (excludedLetterSet.size() >= 26) {
+    const std::bitset<26> excludedLetterSet = get_letters_from_param(excludeArg);
+    if (excludedLetterSet.count() >= 26) {
         std::cerr << "Error: All letters of the alphabet have been excluded.\n";
         return EXIT_FAILURE;
     }
 
-    const std::set<char> requiredLetterSet = get_letters_from_param(requireArg);
-    if (requiredLetterSet.size() > 5) {
+    const std::bitset<26> requiredLetterSet = get_letters_from_param(requireArg);
+    if (requiredLetterSet.count() > WORDLE_WORD_LEN) {
         std::cerr << "Error: More letters are required than are in the word.\n";
         return EXIT_FAILURE;
     }
 
-    for (const char& c : excludedLetterSet) {
-        if (requiredLetterSet.find(c) != requiredLetterSet.end()) {
-            std::cerr << "Error: The set of excluded letters has one or more letters in common with the set of required letters.\n";
-            return EXIT_FAILURE;
-        }
+    if ((excludedLetterSet & requiredLetterSet) != 0) {
+        std::cerr << "Error: The set of excluded letters has one or more letters in common with the set of required letters.\n";
+        return EXIT_FAILURE;
     }
 
     // --------------------
     // GET KNOWN POSITIONS
     // --------------------
     std::vector<std::string> knownArgs = split(knownArg, ',');
-    std::array<char, 10> knownPositions;
+    std::array<char, WORDLE_WORD_LEN> knownPositions;
     knownPositions.fill('*');
 
     for (const std::string& arg : knownArgs) {
@@ -145,29 +146,34 @@ int main(int argc, char** argv)
     std::string line;
     while (std::getline(wordFile, line)) {
         std::transform(line.begin(), line.end(), line.begin(), ::tolower);
-        if (line.length() != 5) {
+        if (line.length() != WORDLE_WORD_LEN) {
             continue;
         }
 
         bool is_valid_word = true;
         std::size_t numRequiredLetters = 0;
-        for (std::size_t i = 0; i < 5; i++) {
+        for (std::size_t i = 0; i < WORDLE_WORD_LEN; i++) {
             const char currentLetter = line.at(i);
+            if (!std::isalpha(currentLetter)) {
+                is_valid_word = false;
+                break;
+            }
             const char knownLetter = knownPositions.at(i);
             if ((knownLetter != '*') && (currentLetter != knownLetter)) {
                 is_valid_word = false;
                 break;
             }
-            if (excludedLetterSet.find(currentLetter) != excludedLetterSet.end()) {
+            const std::size_t currentPos = currentLetter - 'a';
+            if (excludedLetterSet.test(currentPos)) {
                 is_valid_word = false;
                 break;
             }
-            if (requiredLetterSet.find(currentLetter) != requiredLetterSet.end()) {
+            if (requiredLetterSet.test(currentPos)) {
                 numRequiredLetters++;
             }
         }
 
-        if (is_valid_word && (numRequiredLetters == requiredLetterSet.size())) {
+        if (is_valid_word && (numRequiredLetters == requiredLetterSet.count())) {
             std::cout << line << "\n";
         }
     }
