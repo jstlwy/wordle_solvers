@@ -1,4 +1,4 @@
-# Wordle Solver in C##
+# Wordle Solver in C# #
 
 ## Usage
 Example:
