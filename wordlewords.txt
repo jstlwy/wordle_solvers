@@ -353,7 +353,6 @@ aimak
 aimed
 aimee
 aimer
-ain't
 ainee
 ainoi
 ainus
@@ -2468,7 +2467,6 @@ campo
 camps
 campy
 camus
-can't
 canal
 canap
 canch
@@ -3566,7 +3564,6 @@ cytol
 cyton
 czars
 czech
-d'art
 dabba
 dabby
 dabih
@@ -4080,7 +4077,6 @@ domes
 domic
 dompt
 domus
-don't
 donal
 donar
 donas
@@ -6457,7 +6453,6 @@ hazer
 hazes
 hazle
 hdqrs
-he'll
 heads
 heady
 heald
@@ -7128,7 +7123,6 @@ isles
 islet
 islot
 ismal
-isn't
 isnad
 isoln
 isort
@@ -7136,7 +7130,6 @@ issei
 issue
 isthm
 istle
-it'll
 itala
 itali
 italy
@@ -7909,7 +7902,6 @@ kyrie
 kytes
 kythe
 kyung
-l'vov
 laang
 laban
 labba
@@ -12489,7 +12481,6 @@ shawn
 shaws
 shawy
 shays
-she'd
 sheaf
 sheal
 shean
@@ -14762,7 +14753,6 @@ tyste
 tythe
 tzaam
 tzars
-u.s.a
 ualis
 uaupe
 uayeb
@@ -15517,9 +15507,6 @@ waxes
 wayao
 wayne
 wazir
-we'll
-we're
-we've
 weaky
 weald
 weals
@@ -15653,7 +15640,6 @@ white
 whits
 whity
 whizz
-who'd
 whole
 wholl
 whomp
@@ -15781,7 +15767,6 @@ woman
 wombs
 womby
 women
-won't
 wonga
 wonky
 wonna
@@ -16038,7 +16023,6 @@ yomud
 yonic
 yonis
 yores
-you'd
 youff
 young
 youre

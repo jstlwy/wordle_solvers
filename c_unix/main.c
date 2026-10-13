@@ -140,7 +140,7 @@ int main(int argc, char* argv[])
         bool is_valid_word = true;
         uint32_t found_letters = 0;
 
-        for (size_t i = 0; i < WORDLE_WORD_LEN; i++) {
+        for (size_t i = 0; i < WORDLE_WORD_LEN; ++i) {
             const char current_letter = word_buffer[i];
             if (!isalpha(current_letter)) {
                 is_valid_word = false;
@@ -175,7 +175,7 @@ int get_param_index(const int argc, char* argv[const argc], const char expected_
 {
     // First, try to find the expected argument
     int i_arg = -1;
-    for (int i = 1; i < argc; i++) {
+    for (int i = 1; i < argc; ++i) {
         if (strcmp(expected_arg, argv[i]) == 0) {
             i_arg = i;
             break;
@@ -195,7 +195,7 @@ size_t get_population_count(uint32_t num)
 {
     size_t count = 0;
     while (num != 0) {
-        count++;
+        ++count;
         num &= num - 1;
     }
     return count;
