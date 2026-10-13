@@ -6,6 +6,7 @@
 #include <string.h>
 #include <errno.h>
 
+#define NUM_LETTERS_IN_ALPHABET 26
 #define WORDLE_WORD_LEN 5
 #define LINE_BUFFER_LEN 8
 
@@ -31,7 +32,7 @@ int main(int argc, char* argv[])
     puts("Excluded letters:");
     print_letters_in_mask(excluded_letters);
     puts("");
-    if (get_population_count(excluded_letters) >= 26) {
+    if (get_population_count(excluded_letters) >= NUM_LETTERS_IN_ALPHABET) {
         fputs("Error: All letters of the alphabet have been excluded.\n", stderr);
         return EXIT_FAILURE;
     }
@@ -51,7 +52,8 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    char known_letters[5] = "_____";
+    char known_letters[WORDLE_WORD_LEN];
+    memset(known_letters, '_', WORDLE_WORD_LEN);
     const int i_known = get_param_index(argc, argv, "-known");
     if (i_known > 1) {
         const char* known_param = argv[i_known];
@@ -136,15 +138,15 @@ int main(int argc, char* argv[])
 
 void print_letters_in_mask(uint32_t mask)
 {
-    char alphabet[27];
-    for (int i = 0; i < 26; i++, mask = mask >> 1) {
-        if (mask & 0x00000001) {
+    char alphabet[NUM_LETTERS_IN_ALPHABET + 1];
+    for (int i = 0; i < NUM_LETTERS_IN_ALPHABET; i++, mask = mask >> 1) {
+        if (mask & 1) {
             alphabet[i] = 'a' + i;
         } else {
             alphabet[i] = ' ';
         }
     }
-    alphabet[26] = '\0';
+    alphabet[NUM_LETTERS_IN_ALPHABET] = '\0';
     printf("[%s]\n", alphabet);
 }
 
@@ -230,7 +232,7 @@ uint32_t get_letters_from_param(const int i_param, char* argv[])
     return letter_set;
 }
 
-void get_known_char(char known_letters[const static 5], const char param[const])
+void get_known_char(char known_letters[const static WORDLE_WORD_LEN], const char param[const])
 {
     if (!is_digit_char(param[0]) || !is_alpha_char(param[1])) {
         fputs("Error: Format for known characters must be [index][character], e.g. 1e\n", stderr);
