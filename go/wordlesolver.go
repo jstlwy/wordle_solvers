@@ -14,12 +14,11 @@ import (
 
 func filterWordsWithoutIncludedLetters(wordList []string, wordLength int, includeArg string) []string {
     if len(wordList) == 0 || wordLength < 2 || len(includeArg) == 0 {
-        return wordList	
+        return wordList
     }
 
     includedLetters := make(map[string]bool)
-    includeArgs := strings.Split(strings.ToLower(includeArg), ",")
-    for _, arg := range includeArgs {
+    for arg := range strings.SplitSeq(strings.ToLower(includeArg), ",") {
         if len(arg) != 1 {
             continue
         }
@@ -36,7 +35,7 @@ func filterWordsWithoutIncludedLetters(wordList []string, wordLength int, includ
     var filteredWords []string
     for _, word := range wordList {
         wordIsValid := true
-        for letter, _ := range includedLetters {
+        for letter := range includedLetters {
             if !strings.Contains(word, letter) {
                 wordIsValid = false
                 break
@@ -107,8 +106,7 @@ func main() {
     // ------------------
     // Use map to prevent duplicate letters from appearing
     excludedLetterMap := make(map[string]bool)
-    excludeArgs := strings.Split(strings.ToLower(*excludeArg), ",")
-    for _, arg := range excludeArgs {
+    for arg := range strings.SplitSeq(strings.ToLower(*excludeArg), ",") {
         if len(arg) != 1 {
             continue
         }
@@ -120,7 +118,7 @@ func main() {
 
     // Now use the map to create a string of valid letters
     letterGroup := ""
-    for i := 0; i < 26; i++ {
+    for i := range 26 {
         letterRune := rune('a' + i)
         letterStr := string(letterRune)
         if _, ok := excludedLetterMap[letterStr]; ok {
@@ -145,10 +143,9 @@ func main() {
     // Use map to prevent duplicate values from appearing
     knownPositionsMap := make(map[int]string)
     knownPositionsRegex := regexp.MustCompile(`(\d+)([a-z])`)
-    knownArgs := strings.Split(strings.ToLower(*knownArg), ",")
-    for _, arg := range knownArgs {
+    for arg := range strings.SplitSeq(strings.ToLower(*knownArg), ",") {
         matches := knownPositionsRegex.FindStringSubmatch(arg)
-        if matches == nil || len(matches) < 3 {
+        if len(matches) < 3 {
             continue
         }
         position, err := strconv.Atoi(matches[1])
@@ -225,7 +222,7 @@ func main() {
                 os.Exit(1)
             }
         }
-        txtFile, err := os.OpenFile(txtFilename, os.O_WRONLY|os.O_CREATE, 0644)
+        txtFile, err := os.OpenFile(txtFilename, os.O_WRONLY | os.O_CREATE, 0644)
         if err != nil {
             fmt.Printf("Error when opening \"%s\": %v\n", txtFilename, err)
             os.Exit(1)
