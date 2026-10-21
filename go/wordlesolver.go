@@ -154,7 +154,7 @@ func main() {
 				break
 			}
 
-			// Finally, check
+			// Finally, keep track of how many required letters were found
 			if _, ok := requiredLetterMap[letter]; ok {
 				requiredLettersFound[letter] = struct{}{}
 			}
